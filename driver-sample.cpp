@@ -1037,15 +1037,18 @@ void DoStudents(unsigned padding, bool printall)
   unsigned wrap = 32;
   PrintConfig(studentObjectMgr);
   PrintCounts(studentObjectMgr);
+
   DumpPages(studentObjectMgr, wrap);
 
+  
   Student *pStudent1 = 0, *pStudent2 = 0, *pStudent3 = 0;
   try
   {
     pStudent1 = static_cast<Student *>( studentObjectMgr->Allocate() );
     PrintCounts(studentObjectMgr);
     if (printall)
-      DumpPages(studentObjectMgr, wrap);
+        DumpPages(studentObjectMgr, wrap);
+
     pStudent2 = static_cast<Student *>( studentObjectMgr->Allocate() );
     PrintCounts(studentObjectMgr);
     if (printall)

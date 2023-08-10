@@ -18,9 +18,11 @@ ObjectAllocator::~ObjectAllocator()
 void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
 {
 
+    GenericObject*TargetMemory;
     if (stats_.FreeObjects_ > 0)
     {
-        GenericObject *TargetMemory = FreeList_;
+        //std::cout<<"Allocate Operation Not allowed !!!"<<'\n';
+        TargetMemory = FreeList_;
         FreeList_ = FreeList_->Next;
         stats_.Allocations_++;
         stats_.ObjectsInUse_++;
@@ -29,8 +31,9 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
     }
     else if(stats_.FreeObjects_<=0 && stats_.PagesInUse_<DEFAULT_MAX_PAGES-1)
     {
+        //std::cout<<"Allocate Operation Not allowed !!!"<<'\n';
         AllocateNewPage();
-        GenericObject *TargetMemory = FreeList_;
+        TargetMemory = FreeList_;
         FreeList_ = FreeList_->Next;
         stats_.Allocations_++;
         stats_.ObjectsInUse_++;
@@ -39,9 +42,10 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
     }
     else
     {
+
       throw OAException(OAException::OA_EXCEPTION::E_NO_PAGES,"");
     }
-    return nullptr;
+    
 }
 
 void ObjectAllocator::Free(void *Object)
@@ -55,6 +59,10 @@ void ObjectAllocator::Free(void *Object)
         GenericObject *OldFreeList = FreeList_;
         FreeList_ = reinterpret_cast<GenericObject *>(Object);
         FreeList_->Next = OldFreeList;
+        stats_.FreeObjects_++;
+        stats_.Allocations_--;
+        stats_.Deallocations_++;
+        stats_.ObjectsInUse_--;
     }
 }
 
