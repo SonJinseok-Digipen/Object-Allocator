@@ -282,10 +282,15 @@ class ObjectAllocator
 
   private:
       // Some "suggested" members (only a suggestion!)
-    GenericObject *PageList_; //!< the beginning of the list of pages
-    GenericObject *FreeList_; //!< the beginning of the list of objects
+    GenericObject *PageList_=nullptr; //!< the beginning of the list of pages
+    GenericObject *FreeList_=nullptr; //!< the beginning of the list of objects
     OAConfig Config_;
     OAStats Stats_;
+  
+    
+    size_t Calculate_PageSize(size_t ObjectSize,const OAConfig&config);
+    void   AllocatePage();
+
 
     // Lots of other private stuff... 
 };
